@@ -37,11 +37,23 @@ public class IndexServlet extends HttpServlet {
 //		response.getWriter().append("Served at: ").append(request.getContextPath());
 		EntityManager em = DBUtil.createEntityManager();
 
-		List<Task> tasks = em.createNamedQuery("getAllTasks",Task.class).getResultList();
-		response.getWriter().append(Integer.valueOf(tasks.size()).toString());
+		int page=1;
+		try{
+			page = Integer.parseInt(request.getParameter("page"));
+		}catch(NumberFormatException e){}
+
+		List<Task> tasks = em.createNamedQuery("getAllTasks",Task.class).setFirstResult(15*(page-1)).setMaxResults(15).getResultList();
+	//	List<Task> tasks = em.createNamedQuery("getAllTasks",Task.class).getResultList();
+	//	response.getWriter().append(Integer.valueOf(tasks.size()).toString());
+
+		long tasks_count = (long)em.createNamedQuery("getTasksCount",Long.class).getSingleResult();
+//		System.out.println("tasks_count="+tasks_count);
+
 		em.close();
 
 		request.setAttribute("tasks",tasks);
+		request.setAttribute("tasks_count",tasks_count);
+		request.setAttribute("page",page);
 
 		if(request.getSession().getAttribute("flush") != null){
 			request.setAttribute("flush",request.getSession().getAttribute("flush"));
