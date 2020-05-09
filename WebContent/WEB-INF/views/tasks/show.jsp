@@ -9,11 +9,12 @@
 				<h2>id : ${task.id}のタスク詳細ページ</h2>
 				<table>
 					<tbody>
-						<tr>
+<%-- 						<tr>
 							<th>タイトル</th>
 							<td><c:out value="${task.title}" /></td>
 						</tr>
-						<tr>
+ --%>
+ 						<tr>
 							<th>タスク</th>
 							<td><c:out value="${task.content}" /></td>
 						</tr>
